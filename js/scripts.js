@@ -1,4 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+  const sendEmailButton = document.getElementById("send-email");
+
+  sendEmailButton.addEventListener("click", () => {
+    const chartDataUrl = document
+      .getElementById("myChart")
+      .toDataURL("image/png");
+    const email = document.getElementById("email-address").value;
+    if (email) {
+      fetch("http://localhost:3000/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, chartDataUrl }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Email sent successfully!");
+          } else {
+            alert("Failed to send email.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while sending the email.");
+        });
+    }
+  });
+
   const usernameInput = document.getElementById("username");
   const chartTab = document.getElementById("chat-tab");
   const downloadButton = document.getElementById("download");
